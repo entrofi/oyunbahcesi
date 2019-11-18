@@ -1,0 +1,14 @@
+version: '3.2' #docker-compose.yml
+services:
+  jenkins_entrofi:
+    build:
+      context: jenkins/
+    privileged: true
+    user: root
+    ports:
+      - 7080:8080
+      - 50005:50000
+    container_name: jenkins_entrofi
+    volumes:
+      - ./jenkins/jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock

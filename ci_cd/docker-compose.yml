@@ -10,5 +10,4 @@ services:
       - 50005:50000
     container_name: jenkins_entrofi
     volumes:
-      - ./jenkins/jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock

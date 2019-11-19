@@ -1,4 +1,4 @@
-# Different (Possibly Stateless) Jenkins Use-cases
+# Containerised (Possibly Stateless) Jenkins Use-cases
 This initial form tackles only with a containerised version of Jenkins. The goal is to head towards a stateless form of a jenkins setup. In this initial version, we will only have a dockerized Jenkins instance, the state of which will be mapped to static folders in the host machine.
 
 The advantage of this setup is to have the state, which includes history, configurations, etc,  preserved in the host machine and it's not that different from having Jenkins installed on a physical/virtual machine. You still need to setup the installation via Jenkins initial setup interface and configure your jobs, pipelines etc manually.  Nevertheless, it's the initial step towards the "... as a code" approach. 

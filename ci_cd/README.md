@@ -5,4 +5,7 @@ Regarding the contents of the example(s); A step by step approach is followed wh
 
 ## Sample Steps
 1. [Introduce a statefully containerised Jenkins](docs/1_dockerised_jenkins.md)
-2. [Complete basic setup of Jenkins via code](docs/2_jenkins_basic_setup.md): The goal of this step is to complete **basic setup** of Jenkins completely programmatically. 
+2. [Complete the basic setup of Jenkins via code](docs/2_jenkins_basic_setup.md): The goal of this step is to complete **basic setup** of Jenkins completely programmatically. 
+3. [First steps to 'job as code'](docs/3_introduce_scripted_jobs.md) : In this step, we are going to head towards configuring jobs programmatically. 
+
+

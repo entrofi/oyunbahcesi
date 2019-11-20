@@ -8,7 +8,7 @@ In order to serve it's purpose,  jobDsl plugin uses a free style jenkins job, is
 That's enough talking. Let's move to the practical part. 
 
 
-##1. Adding jobDsl support and creating a job using dslScript
+## 1. Adding jobDsl support and creating a job using dslScript
 We introduced automatic plugin installation support to our stateless jenkins instance in the previous step(s). Now we can use our plugin installation file to add our new plugin. 
 
 Open `configs/plugins` file and add `job-dsl` as a new line to this file

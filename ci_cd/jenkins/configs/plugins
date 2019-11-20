@@ -25,7 +25,7 @@ gradle
 handlebars
 jackson2-api
 jdk-tool
-job-dsl-plugin
+job-dsl
 jquery-detached
 jsch
 junit

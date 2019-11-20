@@ -9,10 +9,10 @@ import hudson.model.*
 /**
  * Api documentation for job dsl https://jenkins.io/doc/pipeline/steps/job-dsl/
  */
+def jenkinsInstance = Jenkins.getInstance()
 def jobName = "SeedJob"
-def parent = Jenkins.getInstance()
 // jobDsl plugin uses a free style project in order to seed jobs, let's initialise it.
-def seedProdject = new FreeStyleProject(parent, jobName);
+def seedProdject = new FreeStyleProject(jenkinsInstance, jobName);
 seedProdject.save()
 
 def jobDslBuildStep = new ExecuteDslScripts()
@@ -29,4 +29,4 @@ jobDslBuildStep.with {
             "}"
 }
 seedProdject.getBuildersList().add(jobDslBuildStep)
-parent.reload()
+jenkinsInstance.reload()

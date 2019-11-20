@@ -71,6 +71,6 @@ COPY configs/plugins /var/jenkins_init_config/plugins
 RUN /usr/local/bin/install-plugins.sh < /var/jenkins_init_config/plugins
 ```
 
-The container can be tested after completing this step. Build your container, run it and check if everything is setup as expected from the user interface. 
+The container can be tested after completing this step. Build your container, run it and check if everything works as expected from the user interface. 
 
 

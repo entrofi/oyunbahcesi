@@ -9,6 +9,7 @@ def multiBranchJobs = [
         [
                 name : 'spring-sandbox',
                 remote: 'https://github.com/entrofi/spring.git',
+                jenkinsFilePath: 'restassured-asciidoctor/Jenkinsfile',
                 includes: '*'
         ]
 ]

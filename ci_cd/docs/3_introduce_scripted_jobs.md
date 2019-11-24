@@ -66,12 +66,10 @@ seedProdject.getBuildersList().add(jobDslBuildStep)
 jenkinsInstance.reload()
 ```
 ### Test what has been done so far
-1. run the docker-compose up --build command against your docke-compose file. 
+1. run the docker-compose up --build command against your docker-compose file. 
 2. Browse to the Jenkins instance http://localhost:7080 and login.
 3. Run the **SeedJob** job. 
->The job will fail first time you run it. It's because the jobDsl plugin [limits execution of the scripts without admin approval](https://github.com/jenkinsci/job-dsl-plugin/wiki/Script-Security). In order to approve the execution, go to configuration page of the job and click save.
+    >The job will fail first time you run it. It's because the jobDsl plugin [limits execution of the scripts without admin approval](https://github.com/jenkinsci/job-dsl-plugin/wiki/Script-Security). In order to approve the execution, go to configuration page of the job and click save.
 4. Check if a job named **example** is created. 
 5. Run the example job and check the output of the job using the console output link on the interface. 
-
-
 

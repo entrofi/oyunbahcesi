@@ -1,4 +1,6 @@
 # First Steps to "job as code"
+[Checkout this example from here](https://github.com/entrofi/oyunbahcesi/tree/jenkins_as_code_0.1.0)
+
 We are going to introduce necessary plugins to achieve the goal of programmatic job descriptions in this step and configure them accordingly via programmatic means. 
 
 The first plugin that we are going to introcude is [jobDsl plugin](https://github.com/jenkinsci/job-dsl-plugin). The most common job creation mechanism in Jenkins is that users usually  create jobs by cloning/copying an existing project.  As experienced by most of us, when the number of jobs grows in Jenkins or the job description gets complicated, use of user interface oriented method becomes more tedious. This is where jobDsl plugin comes in handy. It provides the programmatic bridge to create jobs using scripts or configuration files.

@@ -1,4 +1,6 @@
 # Complete basic setup of Jenkins via Code
+[Checkout this example from here](https://github.com/entrofi/oyunbahcesi/tree/jenkins_as_code_0.0.2)
+
 Recall that, our final goal is to get a stateless CI/CD environment which does not require any user interface interaction for configuration. In this step we are going to alter our containerised Jenkins so that we can get a basic setup of Jenkins without referring to user interface (setup wizard).  
 
 In summary this basic setup will handle the following on behalf of an actual human being: 

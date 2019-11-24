@@ -2,11 +2,6 @@
 
 def multiBranchJobs = [
         [
-                name : 'microservices-sandbox',
-                remote: 'https://github.com/entrofi/microservicesSandbox.git',
-                includes: '*'
-        ],
-        [
                 name : 'spring-sandbox',
                 remote: 'https://github.com/entrofi/spring.git',
                 jenkinsFilePath: 'restassured-asciidoctor/Jenkinsfile',

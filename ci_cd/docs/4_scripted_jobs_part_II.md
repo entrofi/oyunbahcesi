@@ -1,5 +1,5 @@
 # Stateless Jenkins - Job as Code Part II
-[In the previous section of these examples](3_introduce_scripted_jobs.md), we created a stateless jenkins  container which can be initialised solely by using scripts. In that example, a seed job for jobdsl plugin, which was later on used to create a simple jenkins job, was also implemented.  In our current example, we will extend previous seed job implementation further to create more complicated jobs by polling external repositories.
+[In the previous section of these examples](3_introduce_scripted_jobs.md), we created a stateless jenkins  container which can be initialised solely by using scripts. In that example, a seed job for jobdsl plugin, which was later on used to create a simple jenkins job, was also implemented.  In our current example, we will extend previous seed job implementation further to create more complicated jobs so that it will be able to poll remote repositories and scan for groovy based jenkins job descriptions. 
 
 ## Summary of the steps: 
 1. Extend `jenkins/init.groovy/1-init-dsl-seed-job.groovy` script to enable polling of remote repositories, so that it can check these repositories for new job descriptions. 
@@ -62,7 +62,7 @@ def jenkinsInstance = Jenkins.getInstance()
 
 def jobScriptsRepository = "https://github.com/entrofi/oyunbahcesi.git"
 def branch = "*/master"
-def jobsScriptFile = "ci_cd/jenkins/configs/jobdsl/*.groovy"
+def jobsScriptFiles = "ci_cd/jenkins/configs/jobdsl/*.groovy"
 def scm = new GitSCM(GitSCM.createRepoList(jobScriptsRepository, "jenkins"), [new BranchSpec(branch)], false, [], null, null, [])
 
 def advancedJobName = "AdvancedSeedJob"
@@ -80,13 +80,128 @@ advancedJobDslBuildStep.with {
     scriptText = ""
     useScriptText = false
     //create jobs using the scripts in a remote repository
-    targets = jobsScriptFile
+    targets = jobsScriptFiles
 }
 advancedSeedProject.getBuildersList().add(advancedJobDslBuildStep)
 
 jenkinsInstance.reload()
 ```
-Let's summarize what this script will be doing: 
+Let's summarize what this script is doing: 
 1. It will poll the master branch of the repository 'https://github.com/entrofi/oyunbahcesi.git'
-2. Check for groovy scripts under the folder `"ci_cd/jenkins/configs/jobdsl/"` and execute them to create new jenkins jobs. The scripts in this repository can poll any number of repositories and can define different types of jenkins jobs or views. 
+2. Check for groovy scripts under the folder `"ci_cd/jenkins/configs/jobdsl/"` and execute them to create new jenkins jobs. The scripts in this remote repository repository can poll any number of repositories and can define different types of jenkins jobs or views. 
+
+## 2. Implementing Job Descriptions
+In this section we are going to implement some example job descriptions in the remote repository. Go to `jenkins/configs/jobdsl` folder, and add a groovy script file called `createJobs.groovy`:
+
+```groovy
+//https://jenkinsci.github.io/job-dsl-plugin/#path/multibranchPipelineJob-branchSources
+//https://javadoc.jenkins.io/plugin/workflow-multibranch/index.html?org/jenkinsci/plugins/workflow/multibranch/WorkflowBranchProjectFactory.html
+def multiBranchJobs = [
+        [
+                name : 'spring-sandbox',
+                remote: 'https://github.com/entrofi/spring.git',
+                jenkinsFilePath: 'restassured-asciidoctor/Jenkinsfile',
+                includes: '*'
+        ]
+]
+
+multiBranchJobs.each {
+    currentJob ->
+        multibranchPipelineJob(currentJob.name) {
+            branchSources {
+                git {
+                    id(UUID.randomUUID().toString())
+                    remote(currentJob.remote)
+                    includes(currentJob.includes)
+                }
+            }
+            factory {
+                workflowBranchProjectFactory {
+                    scriptPath(currentJob.jenkinsFilePath ?: 'Jenkinsfile')
+                }
+            }
+            orphanedItemStrategy {
+                discardOldItems {
+                    numToKeep(100)
+                    daysToKeep(10)
+                }
+            }
+        }
+}
+```
+This groovy script uses [jobdsl api](https://jenkinsci.github.io/job-dsl-plugin/#path/multibranchPipelineJob-branchSources) to create multibranch jobs for the remote repositories which are defined in the multipbranchJobs array. The the `factory` section of the implementation checks if the remote repositories have `Jenkinsfile`s and creates the pipelines for each accordingly. 
+
+This snippet demonstrates how to create a multi branch job using jobdsl api; however we are not limited in terms of the variety of the job descriptions. We can define any kind of  Jenkins jobs, including build monitors, list views, free style jobs, simple pipeline jobs etc., using this api. 
+
+## 3. Installing Tools 
+
+Every build jobhas it's own tooling requirements and in order to keep our "stateless CI/CD" goal, we should be able to automate such kind of tool installations. The example projects that we defined in the previous section are java projects with maven build support. Let's showcase how to install these tools via Jenkins initialization scripts: 
+
+The `2-install-tools.groovy` script installs two different versions of JDK and maven for us.
+
+__Java Installation__
+```groovy
+/**
+ * Install jdk
+ */
+def javaDescriptor = instance.getDescriptor(hudson.model.JDK.class)
+def javaInstallations = []
+def javaVersions = [
+        "jdk8": "jdk-8u102",
+        "jdk11": "jdk-11.0.5"
+]
+//9dHgTtyL@HPvqE@
+
+for (version in javaVersions) {
+    def installer = new JDKInstaller(version.value, true)
+    def installerProps = new InstallSourceProperty([installer])
+    def installation = new JDK(version.key, "", [installerProps])
+    //installer.getDescriptor().doPostCredential('username', 'password')
+    javaInstallations.push(installation)
+}
+
+javaDescriptor.setInstallations(javaInstallations.toArray(new JDK[0]))
+javaDescriptor.save()
+```
+
+__Maven Installation__
+
+```groovy
+
+/**
+ * Install maven: https://stackoverflow.com/questions/55353804/how-to-automate-maven-and-java-jdk8-installation-with-groovy-for-jenkins
+ */
+
+mavenName = "maven3"
+mavenVersion = "3.6.0"
+println("Checking Maven installations...")
+
+// Grab the Maven "task" (which is the plugin handle).
+mavenPlugin = Jenkins.instance.getExtensionList(hudson.tasks.Maven.DescriptorImpl.class)[0]
+
+// Check for a matching installation.
+maven3Install = mavenPlugin.installations.find {
+    install -> install.name.equals(mavenName)
+}
+
+// If no match was found, add an installation.
+if(maven3Install == null) {
+    println("No Maven install found. Adding...")
+
+    newMavenInstall = new hudson.tasks.Maven.MavenInstallation('maven3', null,
+            [new hudson.tools.InstallSourceProperty([new hudson.tasks.Maven.MavenInstaller(mavenVersion)])]
+    )
+
+    mavenPlugin.installations += newMavenInstall
+    mavenPlugin.save()
+
+    println("Maven installation added.")
+} else {
+    println("Maven installation found. Done.")
+}
+```
+
+## Adding Jenkinsfile to the target projects
+The rest is easy, in section two we have defined some target projects which was [entrofi/spring/restassured-asciidoctor](https://github.com/entrofi/spring/tree/master/restassured-asciidoctor) project for this specific example. Define your project as done in section 2. Add you Jenkinsfile to that project and run your Jenkins instance if everything is working as expected. 
+
 

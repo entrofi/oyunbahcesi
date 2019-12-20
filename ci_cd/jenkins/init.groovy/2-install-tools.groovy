@@ -59,7 +59,7 @@ if(maven3Install == null) {
     mavenPlugin.installations += newMavenInstall
     mavenPlugin.save()
 
-    println("Maven install added.")
+    println("Maven installation added.")
 } else {
-    println("Maven install found. Done.")
+    println("Maven installation found. Done.")
 }

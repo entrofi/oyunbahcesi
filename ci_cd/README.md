@@ -9,4 +9,5 @@ A step by step approach is followed while implementing the examples. The documen
 3. [First steps to 'job as code'](docs/3_introduce_scripted_jobs.md) : In this step, we are going to head towards configuring jobs programmatically.
 4. [Stateless Jenkins - Job as Code Part II](docs/4_scripted_jobs_part_II.md): In this part we are going to finalise setup and define some example jobs. 
 
+> The articles are also available in [my blog](https://entrofi.net/tag/jenkins-as-code/).
 

@@ -18,7 +18,7 @@ def javaVersions = [
         "jdk8": "jdk-8u102",
         "jdk11": "jdk-11.0.5"
 ]
-//9dHgTtyL@HPvqE@
+
 
 for (version in javaVersions) {
     def installer = new JDKInstaller(version.value, true)

@@ -15,7 +15,6 @@ public class ServiceConfigurer {
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public GreeterService greeterService() {
         ExperimentingGreeterService greeterService = new ExperimentingGreeterService();
-        greeterService.setReportingEnabled(true);
         return greeterService;
     }
 }

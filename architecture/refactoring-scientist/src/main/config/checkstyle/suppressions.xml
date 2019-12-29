@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE suppressions PUBLIC
+        "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+        "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+
+<suppressions>
+    <!--sample usage-->
+    <!--<suppress files="core/src/main/java/com/entrofi/mea/common/core/interceptors/BaseGeneralInterceptor.java" checks="IllegalCatchCheck" />-->
+    <suppress files="." checks="HiddenField"/>
+    <suppress files="src/main/java/net/entrofi/examples/refactoring/scientist/ScientistExampleApplication.java" checks="HideUtilityClassConstructor" />
+
+</suppressions>

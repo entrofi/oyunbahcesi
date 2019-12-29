@@ -1,13 +1,10 @@
 package net.entrofi.examples.refactoring.scientist.service;
 
 import io.dropwizard.metrics5.ConsoleReporter;
-import io.dropwizard.metrics5.MetricRegistry;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
-
-import static org.junit.Assert.*;
 
 public class ExperimentingGreeterServiceTest {
 
@@ -32,7 +29,7 @@ public class ExperimentingGreeterServiceTest {
     public void greet() {
 
         for( int i = 0; i < 10; i++) {
-            service.greet("Hasan");
+            service.greet("Comak");
         }
         reporter.report();
     }

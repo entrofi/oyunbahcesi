@@ -18,8 +18,6 @@ public class ExperimentingGreeterService implements GreeterService {
 
     private GreeterServiceExperiment serviceExperiment;
 
-    private boolean isReportingEnabled = false;
-
     private ConsoleReporter reporter;
 
     public ExperimentingGreeterService() {
@@ -47,31 +45,19 @@ public class ExperimentingGreeterService implements GreeterService {
         return serviceExperiment;
     }
 
-    public boolean isReportingEnabled() {
-        return isReportingEnabled;
-    }
-
-    public void setReportingEnabled(boolean reportingEnabled) {
-        isReportingEnabled = reportingEnabled;
-    }
-
     private void initReporter() {
-        if (isReportingEnabled) {
-            reporter = ConsoleReporter
-                    .forRegistry(
-                            this.getServiceExperiment().getMetrics(null)
-                    )
-                    .convertRatesTo(TimeUnit.SECONDS)
-                    .convertDurationsTo(TimeUnit.MILLISECONDS)
-                    .build();
-            reporter.start(1, TimeUnit.MILLISECONDS);
-        }
+        reporter = ConsoleReporter
+                .forRegistry(
+                        this.getServiceExperiment().getMetrics(null)
+                )
+                .convertRatesTo(TimeUnit.SECONDS)
+                .convertDurationsTo(TimeUnit.MILLISECONDS)
+                .build();
+        reporter.start(1, TimeUnit.MILLISECONDS);
     }
 
     private void reportAndStop() {
-        if (isReportingEnabled) {
-            reporter.report();
-            reporter.stop();
-        }
+        reporter.report();
+        reporter.stop();
     }
 }

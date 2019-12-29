@@ -15,7 +15,8 @@ public class GreeterServiceExperiment extends Experiment<String> {
     protected void publish(Result<String> result) {
         this.result = result;
         MetricRegistry metricRegistry = this.getMetrics(null);
-        MetricName greetingGauge = MetricName.build(GreeterServiceExperiment.class.getCanonicalName(), "greeting");
+        MetricName greetingGauge = MetricName
+                .build(GreeterServiceExperiment.class.getCanonicalName(), "greeting");
 
         if (metricRegistry.getMetrics().get(greetingGauge) == null) {
             Gauge<String> gauge = this::getResultGaugeValue;
@@ -27,9 +28,13 @@ public class GreeterServiceExperiment extends Experiment<String> {
     private String getResultGaugeValue() {
         if (getResult() != null && getResult().getCandidate().isPresent()) {
             if (Boolean.FALSE.equals(getResult().getMatch().get())) {
-                return getResult().getCandidate().get().getValue() + " does  not match " + getResult().getControl().getValue();
+                return getResult().getCandidate().get().getValue()
+                        + " does  not match "
+                        + getResult().getControl().getValue();
             } else {
-                return getResult().getCandidate().get().getValue() + " matches " + getResult().getControl().getValue();
+                return getResult().getCandidate().get().getValue()
+                        + " matches "
+                        + getResult().getControl().getValue();
             }
         }
         return "Nothing to say!";
